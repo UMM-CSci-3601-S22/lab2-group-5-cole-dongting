@@ -7,14 +7,43 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({ "MagicNumber", "LineLength" })
 public class ToDosDatabaseTest {
     @Test
-    void testFilterToDosByCategory() {
+    void testFilterToDosByCategory() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosHomework = db.filterToDosByCategory(allToDos, "homework");
+        assertEquals(79, todosHomework.length, "Incorrect number of To-Dos with category \"Homework\". 79 results should be found.");
+
+      //Check results are 0 if given a nonexistent category
+      ToDos[] todosFooBar = db.filterToDosByCategory(allToDos, "FooBar");
+      assertEquals(0, todosFooBar.length, "Incorrect number of To-Dos with category \"FooBar\". No results should be found.");
+
+      //Check first result is correct
+      ToDos firstHomeworkToDo = todosHomework[0];
+        assertEquals("58895985ae3b752b124e7663", firstHomeworkToDo._id, "Incorrect name");
+        assertEquals("homework", firstHomeworkToDo.category, "Incorrect category");
 
     }
 
     @Test
-    void testFilterToDosByOwner() {
+    void testFilterToDosByOwner() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosBarry = db.filterToDosByOwner(allToDos, "Barry");
+        assertEquals(51, todosBarry.length, "Incorrect number of To-Dos with owner \"Barry\". 51 results should be found.");
+
+      //Check results are 0 if given a nonexistent owner
+      ToDos[] todosFooBar = db.filterToDosByOwner(allToDos, "FooBar");
+      assertEquals(0, todosFooBar.length, "Incorrect number of To-Dos with owner \"FooBar\". No results should be found.");
+
+      //Check first result is correct
+      ToDos firstBarryToDo = todosBarry[0];
+        assertEquals("588959856f0b82ee93cd93eb", firstBarryToDo._id, "Incorrect name");
+        assertEquals("Barry", firstBarryToDo.owner, "Incorrect category");
 
     }
 
