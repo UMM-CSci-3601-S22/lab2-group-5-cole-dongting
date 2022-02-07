@@ -7,12 +7,14 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import io.javalin.http.Context;
 import io.javalin.http.HttpCode;
+import io.javalin.http.NotFoundResponse;
 import umm3601.Server;
 
 public class ToDosControllerTest {
@@ -55,6 +57,13 @@ public class ToDosControllerTest {
 
     verify(ctx).json(todo);
     verify(ctx).status(HttpCode.OK);
+  }
 
+  @Test
+  public void errorHandleFailedID() {
+    when(ctx.pathParam("id")).thenReturn(null);
+    Assertions.assertThrows(NotFoundResponse.class, () -> {
+      userController.getToDoByID(ctx);
+    });
   }
 }
