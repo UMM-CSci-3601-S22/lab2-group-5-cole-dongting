@@ -50,6 +50,8 @@ public class ToDosDatabase {
   public ToDos[] listToDos(Map<String, List<String>> queryParams) {
     ToDos[] filteredToDos = allToDos;
 
+
+/*
     // Filter owner if defined
     if (queryParams.containsKey("owner")) {
       String targetOwner = queryParams.get("owner").get(0);
@@ -65,6 +67,8 @@ public class ToDosDatabase {
       filteredToDos = filterToDosByCategory(filteredToDos, targetCategory);
     }
     // Process other query parameters here...
+
+     */
 
     return filteredToDos;
   }
