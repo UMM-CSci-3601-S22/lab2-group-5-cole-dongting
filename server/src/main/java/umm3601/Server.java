@@ -6,6 +6,8 @@ import io.javalin.Javalin;
 import io.javalin.core.util.RouteOverviewPlugin;
 import io.javalin.http.staticfiles.Location;
 import umm3601.user.UserDatabase;
+import umm3601.todos.ToDosController;
+import umm3601.todos.ToDosDatabase;
 import umm3601.user.UserController;
 
 public class Server {
@@ -16,11 +18,13 @@ public class Server {
   public static final String TODOS_DATA_FILE = "/todos.json";
 
   private static UserDatabase userDatabase;
+  private static ToDosDatabase todosDatabase;
 
   public static void main(String[] args) {
 
     // Initialize dependencies
     UserController userController = buildUserController();
+    ToDosController toDosController = buildToDosController();
 
     Javalin server = Javalin.create(config -> {
       // This tells the server where to look for static files,
@@ -49,7 +53,7 @@ public class Server {
     server.get("/api/users", userController::getUsers);
 
     //Gets the ToDos of a user
-    server.get("/api/todos", );
+    server.get("/api/todos", toDosController::getAllToDos);
   }
 
   /***
@@ -75,5 +79,30 @@ public class Server {
     }
 
     return userController;
+  }
+
+    /***
+   * Create a database using the json file, use it as data source for a new
+   * ToDosController
+   *
+   * Constructing the controller might throw an IOException if there are problems
+   * reading from the JSON "database" file. If that happens we'll print out an
+   * error message exit the program.
+   */
+  private static ToDosController buildToDosController() {
+    ToDosController toDosController = null;
+
+    try {
+      todosDatabase = new ToDosDatabase(TODOS_DATA_FILE);
+      toDosController = new ToDosController(todosDatabase);
+    } catch (IOException e) {
+      System.err.println("The server failed to load the user data; shutting down.");
+      e.printStackTrace(System.err);
+
+      // Exit from the Java program
+      System.exit(1);
+    }
+
+    return toDosController;
   }
 }
