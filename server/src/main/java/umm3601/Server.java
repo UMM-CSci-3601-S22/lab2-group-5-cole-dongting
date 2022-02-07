@@ -54,6 +54,9 @@ public class Server {
 
     //Gets the ToDos of a user
     server.get("/api/todos", toDosController::getAllToDos);
+
+    // Get specific user
+    server.get("/api/todos/{id}", toDosController::getToDoByID);
   }
 
   /***
