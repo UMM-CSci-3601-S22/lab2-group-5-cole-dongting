@@ -6,6 +6,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +25,7 @@ public class ToDosControllerTest {
 
   private Context ctx = mock(Context.class);
 
-  private ToDosController userController;
+  private ToDosController toDosController;
   private static ToDosDatabase db;
 
   @BeforeEach
@@ -29,7 +33,7 @@ public class ToDosControllerTest {
     ctx.clearCookieStore();
 
     db = new ToDosDatabase(Server.TODOS_DATA_FILE);
-    userController = new ToDosController(db);
+    toDosController = new ToDosController(db);
   }
 
   @Test
@@ -37,9 +41,9 @@ public class ToDosControllerTest {
     // Call the method on the mock context, which doesn't
     // include any filters, so we should get all the users
     // back.
-    userController.getAllToDos(ctx);
+    toDosController.getAllToDos(ctx);
 
-    // Confirm that `json` was called with all the users.
+    // Confirm that `json` was called with all the ToDos.
     ArgumentCaptor<ToDos[]> argument = ArgumentCaptor.forClass(ToDos[].class);
     verify(ctx).json(argument.capture());
     assertEquals(db.size(), argument.getValue().length);
@@ -53,7 +57,7 @@ public class ToDosControllerTest {
 
     when(ctx.pathParam("id")).thenReturn(id);
 
-    userController.getToDoByID(ctx);
+    toDosController.getToDoByID(ctx);
 
     verify(ctx).json(todo);
     verify(ctx).status(HttpCode.OK);
@@ -63,7 +67,25 @@ public class ToDosControllerTest {
   public void errorHandleFailedID() {
     when(ctx.pathParam("id")).thenReturn(null);
     Assertions.assertThrows(NotFoundResponse.class, () -> {
-      userController.getToDoByID(ctx);
+      toDosController.getToDoByID(ctx);
     });
+
+
+  }
+
+  @Test
+  public void listByCategory() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("category", Arrays.asList(new String[] {"homework"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    toDosController.getAllToDos(ctx);
+
+    // Confirm that all the ToDos passed to `json` work for 'homework'.
+    ArgumentCaptor<ToDos[]> argument = ArgumentCaptor.forClass(ToDos[].class);
+    verify(ctx).json(argument.capture());
+    for (ToDos todos : argument.getValue()) {
+      assertEquals("homework", todos.category);
+    }
   }
 }

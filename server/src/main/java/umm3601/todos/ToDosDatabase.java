@@ -31,14 +31,18 @@ public class ToDosDatabase {
   }
 
   /**
-   * Get the single user specified by the given ID. Return `null` if there is no
+   * Get the single To-DO specified by the given ID. Return `null` if there is no
    * user with that ID.
    *
-   * @param id the ID of the desired user
-   * @return the user with the given ID, or null if there is no user with that ID
+   * @param id the ID of the desired To-DO
+   * @return the To-DO with the given ID, or null if there is no To-DO with that
+   *         ID
    */
   public ToDos getToDos(String id) {
-    return Arrays.stream(allToDos).filter(x -> x._id.equals(id)).findFirst().orElse(null);
+    return Arrays.stream(allToDos)
+        .filter(todos -> todos._id.equals(id))
+        .findFirst()
+        .orElse(null);
   }
 
   /**
@@ -50,17 +54,18 @@ public class ToDosDatabase {
   public ToDos[] listToDos(Map<String, List<String>> queryParams) {
     ToDos[] filteredToDos = allToDos;
 
+    /*
+     * // Filter owner if defined
+     * if (queryParams.containsKey("owner")) {
+     * String targetOwner = queryParams.get("owner").get(0);
+     * filteredToDos = filterToDosByOwner(filteredToDos, targetOwner);
+     * }
+     */
 
-/*
-    // Filter owner if defined
-    if (queryParams.containsKey("owner")) {
-      String targetOwner = queryParams.get("owner").get(0);
-      filteredToDos = filterToDosByOwner(filteredToDos, targetOwner);
-    }
     // Filter status if defined
-    //if (queryParams.containsKey("status")) {
+    // if (queryParams.containsKey("status")) {
 
-    //}
+    // }
     // Filter category if defined
     if (queryParams.containsKey("category")) {
       String targetCategory = queryParams.get("category").get(0);
@@ -68,33 +73,34 @@ public class ToDosDatabase {
     }
     // Process other query parameters here...
 
-     */
-
     return filteredToDos;
   }
 
   /**
-   * Get an array of all the users having the target age.
+   * Get an array of all the To-DOs having the target owner.
    *
-   * @param users     the list of users to filter by age
-   * @param targetAge the target age to look for
-   * @return an array of all the users from the given list that have the target
-   *         age
+   * @param todos       the list of To-DOs to filter by owner
+   * @param targetOwner the target owner to look for
+   * @return an array of all the To-DOs from the given list that have the target
+   *         owner
    */
   public ToDos[] filterToDosByOwner(ToDos[] todos, String targetOwner) {
     return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(ToDos[]::new);
   }
 
   /**
-   * Get an array of all the users having the target company.
+   * Get an array of all the To-DOs having the target company.
    *
-   * @param users         the list of users to filter by company
-   * @param targetCompany the target company to look for
+   * @param todos          the list of To-DOs to filter by company
+   * @param targetCategory the target company to look for
    * @return an array of all the users from the given list that have the target
    *         company
    */
   public ToDos[] filterToDosByCategory(ToDos[] todos, String targetCategory) {
-    return Arrays.stream(todos).filter(x -> x.category.equals(targetCategory)).toArray(ToDos[]::new);
+    return Arrays.stream(todos)
+        .filter(x -> x.category
+            .equals(targetCategory))
+        .toArray(ToDos[]::new);
   }
 
 }
