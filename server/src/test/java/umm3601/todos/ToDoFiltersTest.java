@@ -20,13 +20,13 @@ public class ToDoFiltersTest {
     Map<String, List<String>> queryParams = new HashMap<>();
 
     // Test real category
-    queryParams.put("category", Arrays.asList(new String[] { "software design" }));
+    queryParams.put("category", Arrays.asList(new String[] {"software design"}));
     ToDos[] softwareDesignToDos = db.listToDos(queryParams);
     assertEquals(74, softwareDesignToDos.length,
         "Incorrect number of To-Dos with category \"software design\". There are 74 total.");
 
     queryParams.clear();
-    queryParams.put("category", Arrays.asList(new String[] { "foobar" }));
+    queryParams.put("category", Arrays.asList(new String[] {"foobar"}));
     ToDos[] foobarToDos = db.listToDos(queryParams);
     assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with category \"foobar\". There are 0 total.");
   }
