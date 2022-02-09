@@ -54,11 +54,11 @@ public class ToDosDatabase {
   public ToDos[] listToDos(Map<String, List<String>> queryParams) {
     ToDos[] filteredToDos = allToDos;
 
-      // Filter owner if defined
-      if (queryParams.containsKey("owner")) {
+    // Filter owner if defined
+    if (queryParams.containsKey("owner")) {
       String targetOwner = queryParams.get("owner").get(0);
       filteredToDos = filterToDosByOwner(filteredToDos, targetOwner);
-      }
+    }
 
     // Filter status if defined
     if (queryParams.containsKey("status")) {
@@ -109,17 +109,14 @@ public class ToDosDatabase {
 
     if (targetStatus.equals("complete")) {
       requestedStatus = true;
-      return Arrays.stream(todos)
-          .filter(x -> x.status == requestedStatus)
-          .toArray(ToDos[]::new);
     } else if (targetStatus.equals("incomplete")) {
       requestedStatus = false;
-      return Arrays.stream(todos)
-          .filter(x -> x.status == requestedStatus)
-          .toArray(ToDos[]::new);
     } else {
       throw new IllegalArgumentException("Invalid status: " + targetStatus);
     }
+    return Arrays.stream(todos)
+        .filter(x -> x.status == requestedStatus)
+        .toArray(ToDos[]::new);
 
   }
 
