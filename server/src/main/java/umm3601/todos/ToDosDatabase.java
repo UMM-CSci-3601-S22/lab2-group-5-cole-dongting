@@ -54,16 +54,18 @@ public class ToDosDatabase {
   public ToDos[] listToDos(Map<String, List<String>> queryParams) {
     ToDos[] filteredToDos = allToDos;
 
-      // Filter owner if defined
-      if (queryParams.containsKey("owner")) {
+    // Filter owner if defined
+    if (queryParams.containsKey("owner")) {
       String targetOwner = queryParams.get("owner").get(0);
       filteredToDos = filterToDosByOwner(filteredToDos, targetOwner);
-      }
+    }
 
     // Filter status if defined
-    // if (queryParams.containsKey("status")) {
+    if (queryParams.containsKey("status")) {
+      String targetStatus = queryParams.get("status").get(0);
+      filteredToDos = filterToDosByStatus(filteredToDos, targetStatus);
+    }
 
-    // }
     // Filter category if defined
     if (queryParams.containsKey("category")) {
       String targetCategory = queryParams.get("category").get(0);
@@ -83,7 +85,9 @@ public class ToDosDatabase {
    *         owner
    */
   public ToDos[] filterToDosByOwner(ToDos[] todos, String targetOwner) {
-    return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(ToDos[]::new);
+    return Arrays.stream(todos)
+        .filter(x -> x.owner.equals(targetOwner))
+        .toArray(ToDos[]::new);
   }
 
   /**
@@ -96,9 +100,24 @@ public class ToDosDatabase {
    */
   public ToDos[] filterToDosByCategory(ToDos[] todos, String targetCategory) {
     return Arrays.stream(todos)
-        .filter(x -> x.category
-            .equals(targetCategory))
+        .filter(x -> x.category.equals(targetCategory))
         .toArray(ToDos[]::new);
+  }
+
+  public ToDos[] filterToDosByStatus(ToDos[] todos, String targetStatus) {
+    boolean requestedStatus;
+
+    if (targetStatus.equals("complete")) {
+      requestedStatus = true;
+    } else if (targetStatus.equals("incomplete")) {
+      requestedStatus = false;
+    } else {
+      throw new IllegalArgumentException("Invalid status: " + targetStatus);
+    }
+    return Arrays.stream(todos)
+        .filter(x -> x.status == requestedStatus)
+        .toArray(ToDos[]::new);
+
   }
 
 }
