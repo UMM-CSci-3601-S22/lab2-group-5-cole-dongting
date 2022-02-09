@@ -107,21 +107,20 @@ public class ToDosDatabase {
   }
 
   public ToDos[] filterToDosByStatus(ToDos[] todos, String targetStatus) {
-
     boolean requestedStatus;
 
-    if (targetStatus == "complete") {
+    if (targetStatus.equals("complete")) {
       requestedStatus = true;
       return Arrays.stream(todos)
           .filter(x -> x.status == requestedStatus)
           .toArray(ToDos[]::new);
-    } else if (targetStatus == "incomplete") {
+    } else if (targetStatus.equals("incomplete")) {
       requestedStatus = false;
       return Arrays.stream(todos)
           .filter(x -> x.status == requestedStatus)
           .toArray(ToDos[]::new);
     } else {
-      return new ToDos[0];
+      throw new IllegalArgumentException("Invalid status: " + targetStatus);
     }
 
   }

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({ "MagicNumber", "LineLength" })
@@ -46,7 +47,8 @@ public class ToDoFiltersTest {
     // Test nonexistent status
     queryParams.clear();
     queryParams.put("status", Arrays.asList(new String[] {"foobar"}));
-    ToDos[] foobarToDos = db.listToDos(queryParams);
-    assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with status \"foobar\". There are 0 total.");
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      db.listToDos(queryParams);
+    });
   }
 }
