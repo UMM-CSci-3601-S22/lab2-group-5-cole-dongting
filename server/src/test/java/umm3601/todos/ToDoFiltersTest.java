@@ -24,10 +24,28 @@ public class ToDoFiltersTest {
     ToDos[] softwareDesignToDos = db.listToDos(queryParams);
     assertEquals(74, softwareDesignToDos.length,
         "Incorrect number of To-Dos with category \"software design\". There are 74 total.");
-
+    // Test nonexistent category
     queryParams.clear();
     queryParams.put("category", Arrays.asList(new String[] {"foobar"}));
     ToDos[] foobarToDos = db.listToDos(queryParams);
     assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with category \"foobar\". There are 0 total.");
   }
+
+    // Test category filter for ToDosDatabase
+    @Test
+    public void ownerFilters() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test real owner
+      queryParams.put("owner", Arrays.asList(new String[] {"Fry"}));
+      ToDos[] softwareDesignToDos = db.listToDos(queryParams);
+      assertEquals(61, softwareDesignToDos.length,
+          "Incorrect number of To-Dos with owner \"Fry\". There are 61 total.");
+      // Test nonexistent owner
+      queryParams.clear();
+      queryParams.put("owner", Arrays.asList(new String[] {"foobar"}));
+      ToDos[] foobarToDos = db.listToDos(queryParams);
+      assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
+    }
 }
