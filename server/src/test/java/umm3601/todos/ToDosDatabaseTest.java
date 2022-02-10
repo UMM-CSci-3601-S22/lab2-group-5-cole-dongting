@@ -83,7 +83,7 @@ public class ToDosDatabaseTest {
     }
 
     @Test
-    void testFilterToDosByLimit() throws IOException{
+    void testFilterToDosByLimit() throws IOException {
       ToDosDatabase db = new ToDosDatabase("/todos.json");
       ToDos[] allToDos = db.listToDos(new HashMap<>());
 
