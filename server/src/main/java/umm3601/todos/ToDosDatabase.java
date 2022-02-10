@@ -3,6 +3,7 @@ package umm3601.todos;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,10 @@ public class ToDosDatabase {
       filteredToDos = filterToDosByCategory(filteredToDos, targetCategory);
     }
     // Process other query parameters here...
+    if (queryParams.containsKey("orderBy")) {
+      String targetOrderBy = queryParams.get("orderBy").get(0);
+      filteredToDos = filterToDosByCategory(filteredToDos, targetOrderBy);
+    }
 
     return filteredToDos;
   }
@@ -117,6 +122,27 @@ public class ToDosDatabase {
     return Arrays.stream(todos)
         .filter(x -> x.status == requestedStatus)
         .toArray(ToDos[]::new);
+
+  }
+
+  public ToDos[] filterToDosByOrder(ToDos[] todos, String targetOrderBy) {
+    List<ToDos> todos2 = Arrays.asList(todos);
+
+    if (targetOrderBy.equals("owner")) {
+      todos2.sort((i1, i2) -> i1.getOwner().compareTo(i2.getOwner()));
+    } else if (targetOrderBy.equals("category")) {
+      todos2.sort(Comparator.comparing(ToDos::getCategory));
+    } else if (targetOrderBy.equals("body")) {
+      todos2.sort(Comparator.comparing(ToDos::getBody));
+    } else if (targetOrderBy.equals("status")) {
+      todos2.sort(Comparator.comparing(ToDos::getStatus));
+    } else {
+      throw new IllegalArgumentException("Invalid status: " + targetOrderBy);
+    }
+
+    ToDos[] todosNew = todos2.toArray();
+
+    return todosNew;
 
   }
 
