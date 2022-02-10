@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.javalin.http.BadRequestResponse;
+
 /**
  * A fake "database" of user info
  * <p>
@@ -71,6 +73,18 @@ public class ToDosDatabase {
       String targetCategory = queryParams.get("category").get(0);
       filteredToDos = filterToDosByCategory(filteredToDos, targetCategory);
     }
+
+    // Filter limit of tasks
+    if (queryParams.containsKey("limit")) {
+      String limitParams = queryParams.get("limit").get(0);
+      try{
+        int targetLimit = Integer.parseInt(limitParams);
+        filteredToDos = filterToDosByLimit(filteredToDos, targetLimit);
+      } catch (NumberFormatException e) {
+        throw new BadRequestResponse("The value '" + limitParams + "' can not be parsed to integer.");
+      }
+    }
+
     // Process other query parameters here...
 
     return filteredToDos;
@@ -118,6 +132,12 @@ public class ToDosDatabase {
         .filter(x -> x.status == requestedStatus)
         .toArray(ToDos[]::new);
 
+  }
+
+  public ToDos[] filterToDosByLimit(ToDos[] todos, int targetLimit) {
+    return Arrays.stream(todos)
+        .limit(targetLimit)
+        .toArray(ToDos[]::new);
   }
 
 }
