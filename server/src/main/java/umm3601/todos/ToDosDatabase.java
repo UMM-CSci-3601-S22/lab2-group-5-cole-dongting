@@ -77,7 +77,7 @@ public class ToDosDatabase {
     // Filter limit of tasks
     if (queryParams.containsKey("limit")) {
       String limitParams = queryParams.get("limit").get(0);
-      try{
+      try {
         int targetLimit = Integer.parseInt(limitParams);
         filteredToDos = filterToDosByLimit(filteredToDos, targetLimit);
       } catch (NumberFormatException e) {
