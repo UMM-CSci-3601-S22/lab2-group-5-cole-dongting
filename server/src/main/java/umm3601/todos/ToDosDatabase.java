@@ -150,6 +150,8 @@ public class ToDosDatabase {
       todosAsList.sort(Comparator.comparing(ToDos::getBody));
     } else if (targetOrderBy.equals("status")) {
       todosAsList.sort(Comparator.comparing(ToDos::getStatus));
+    } else {
+      throw new IllegalArgumentException("Invalid status: " + targetOrderBy);
     }
 
     ToDos[] todosBackToArray = todosAsList.toArray(ToDos[]::new);

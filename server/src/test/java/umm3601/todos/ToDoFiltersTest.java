@@ -71,22 +71,23 @@ public class ToDoFiltersTest {
       assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
     }
 
-    // Test category filter for ToDosDatabase
+    // Test Category orderBy for ToDosDatabase
     @Test
     public void orderByCategory() throws IOException {
       ToDosDatabase db = new ToDosDatabase("/todos.json");
       Map<String, List<String>> queryParams = new HashMap<>();
 
-      // Test real orderBy
+      // Test real orderBy Category
       queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
       ToDos[] totalToDos = db.listToDos(queryParams);
       assertEquals(300, totalToDos.length,
           "Incorrect Input.");
 
-      // Test nonexistent owner
+      // Test nonexistent orderBy Category
       queryParams.clear();
       queryParams.put("orderBy", Arrays.asList(new String[] {"number"}));
-      ToDos[] foobarToDos = db.listToDos(queryParams);
-      assertEquals(300, foobarToDos.length, "Incorrect Input.");
+      Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        db.listToDos(queryParams);
+      });
     }
 }

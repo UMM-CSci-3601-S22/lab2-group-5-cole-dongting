@@ -89,42 +89,42 @@ public class ToDosDatabaseTest {
 
       // ** Owner Check **
 
-      ToDos[] todosOrders_Owner = db.filterToDosByOrder(allToDos, "owner");
-        assertEquals(300, todosOrders_Owner.length, "Invalid status, please try again. ");
+      ToDos[] todosOrdersOwner = db.filterToDosByOrder(allToDos, "owner");
+        assertEquals(300, todosOrdersOwner.length, "Invalid status, please try again. ");
 
       //Check first result is correct
-      ToDos firstOrderTodosByOwner = todosOrders_Owner[0];
+      ToDos firstOrderTodosByOwner = todosOrdersOwner[0];
         assertEquals("Barry", firstOrderTodosByOwner.owner, "Incorrect owner");
 
       // ** Category Check **
 
-      ToDos[] todosOrders_Category = db.filterToDosByOrder(allToDos, "category");
-        assertEquals(300, todosOrders_Category.length, "Invalid status, please try again. ");
+      ToDos[] todosOrdersCategory = db.filterToDosByOrder(allToDos, "category");
+        assertEquals(300, todosOrdersCategory.length, "Invalid status, please try again. ");
 
       //Check first result is correct
-      ToDos firstOrderTodosByCategory = todosOrders_Category[0];
+      ToDos firstOrderTodosByCategory = todosOrdersCategory[0];
         assertEquals("groceries", firstOrderTodosByCategory.category, "Incorrect category");
 
       // ** Body Check **
 
-      ToDos[] todosOrders_Body = db.filterToDosByOrder(allToDos, "body");
-        assertEquals(300, todosOrders_Body.length, "Invalid status, please try again. ");
+      ToDos[] todosOrdersBody = db.filterToDosByOrder(allToDos, "body");
+        assertEquals(300, todosOrdersBody.length, "Invalid status, please try again. ");
 
       //Check first result is correct
-      ToDos firstOrderTodosByBody = todosOrders_Body[0];
+      ToDos firstOrderTodosByBody = todosOrdersBody[0];
         assertEquals("Ad sint incididunt officia veniam incididunt. Voluptate exercitation eu aliqua laboris occaecat deserunt cupidatat velit nisi sunt mollit sint amet.", firstOrderTodosByBody.body, "Incorrect body");
 
       // ** Status Check **
 
-      ToDos[] todosOrders_Status = db.filterToDosByOrder(allToDos, "status");
-        assertEquals(300, todosOrders_Status.length, "Invalid status, please try again. ");
+      ToDos[] todosOrdersStatus = db.filterToDosByOrder(allToDos, "status");
+        assertEquals(300, todosOrdersStatus.length, "Invalid status, please try again. ");
 
       //Check first result is correct
-      ToDos firstOrderTodosByStatus = todosOrders_Status[0];
+      ToDos firstOrderTodosByStatus = todosOrdersStatus[0];
         assertEquals(false, firstOrderTodosByStatus.status, "Incorrect status");
 
       //Check last result is correct
-      ToDos lastOrderTodosByStatus = todosOrders_Status[299];
+      ToDos lastOrderTodosByStatus = todosOrdersStatus[299];
         assertEquals(true, lastOrderTodosByStatus.status, "Incorrect status");
 
     }
