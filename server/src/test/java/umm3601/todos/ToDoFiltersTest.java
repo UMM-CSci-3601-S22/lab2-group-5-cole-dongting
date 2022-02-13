@@ -63,10 +63,30 @@ public class ToDoFiltersTest {
       ToDos[] softwareDesignToDos = db.listToDos(queryParams);
       assertEquals(61, softwareDesignToDos.length,
           "Incorrect number of To-Dos with owner \"Fry\". There are 61 total.");
+
       // Test nonexistent owner
       queryParams.clear();
       queryParams.put("owner", Arrays.asList(new String[] {"foobar"}));
       ToDos[] foobarToDos = db.listToDos(queryParams);
       assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
+    }
+
+    // Test category filter for ToDosDatabase
+    @Test
+    public void orderByCategory() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test real orderBy
+      queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
+      ToDos[] totalToDos = db.listToDos(queryParams);
+      assertEquals(300, totalToDos.length,
+          "Incorrect Input.");
+
+      // Test nonexistent owner
+      queryParams.clear();
+      queryParams.put("orderBy", Arrays.asList(new String[] {"number"}));
+      ToDos[] foobarToDos = db.listToDos(queryParams);
+      assertEquals(300, foobarToDos.length, "Incorrect Input.");
     }
 }

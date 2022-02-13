@@ -83,6 +83,62 @@ public class ToDosDatabaseTest {
     }
 
     @Test
+    void testFilterToDosByOrder_Owner() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosOrders = db.filterToDosByOrder(allToDos, "owner");
+        assertEquals(300, todosOrders.length, "Invalid status, please try again. ");
+
+      //Check first result is correct
+      ToDos firstOrderTodosByOwner = todosOrders[0];
+        assertEquals("Barry", firstOrderTodosByOwner.owner, "Incorrect owner");
+    }
+
+    @Test
+    void testFilterToDosByOrder_Category() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosOrders = db.filterToDosByOrder(allToDos, "category");
+        assertEquals(300, todosOrders.length, "Invalid status, please try again. ");
+
+      //Check first result is correct
+      ToDos firstOrderTodosByCategory = todosOrders[0];
+        assertEquals("groceries", firstOrderTodosByCategory.category, "Incorrect category");
+    }
+
+    @Test
+    void testFilterToDosByOrder_Body() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosOrders = db.filterToDosByOrder(allToDos, "body");
+        assertEquals(300, todosOrders.length, "Invalid status, please try again. ");
+
+      //Check first result is correct
+      ToDos firstOrderTodosByBody = todosOrders[0];
+        assertEquals("Ad sint incididunt officia veniam incididunt. Voluptate exercitation eu aliqua laboris occaecat deserunt cupidatat velit nisi sunt mollit sint amet.", firstOrderTodosByBody.body, "Incorrect body");
+    }
+
+    @Test
+    void testFilterToDosByOrder_Status() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosOrders = db.filterToDosByOrder(allToDos, "status");
+        assertEquals(300, todosOrders.length, "Invalid status, please try again. ");
+
+      //Check first result is correct
+      ToDos firstOrderTodosByStatus = todosOrders[0];
+        assertEquals(false, firstOrderTodosByStatus.status, "Incorrect status");
+
+      //Check last result is correct
+      ToDos lastOrderTodosByStatus = todosOrders[299];
+        assertEquals(true, lastOrderTodosByStatus.status, "Incorrect status");
+    }
+
+    @Test
     void testFilterToDosByLimit() throws IOException {
       ToDosDatabase db = new ToDosDatabase("/todos.json");
       ToDos[] allToDos = db.listToDos(new HashMap<>());
