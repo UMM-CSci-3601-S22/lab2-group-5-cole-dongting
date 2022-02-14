@@ -67,8 +67,8 @@ public class ToDoFiltersTest {
       // Test nonexistent contains
       queryParams.clear();
       queryParams.put("contains", Arrays.asList(new String[] {"NicReallyGood"}));
-      ToDos[] NicReallyGoodToDos = db.listToDos(queryParams);
-      assertEquals(0, NicReallyGoodToDos.length, "Incorrect number of To-Dos with body contains \"NicReallyGood\". There are 0 total.");
+      ToDos[] nicReallyGoodToDos = db.listToDos(queryParams);
+      assertEquals(0, nicReallyGoodToDos.length, "Incorrect number of To-Dos with body contains \"NicReallyGood\". There are 0 total.");
     }
 
     // Test category filter for ToDosDatabase
