@@ -26,4 +26,21 @@ public class ToDos {
   public boolean status;
   public String body;
   public String category;
+
+  public String getOwner() {
+    return this.owner;
+  }
+
+  public String getCategory() {
+    return this.category;
+  }
+
+  public String getBody() {
+    return this.body;
+  }
+
+  public Boolean getStatus() {
+    return this.status;
+  }
+
 }
