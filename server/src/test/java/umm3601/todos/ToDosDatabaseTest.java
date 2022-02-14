@@ -83,6 +83,20 @@ public class ToDosDatabaseTest {
     }
 
     @Test
+    void testFilterToDosByBodyContains() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      ToDos[] allToDos = db.listToDos(new HashMap<>());
+
+      ToDos[] todosSunt = db.filterToDosByBodyContains(allToDos, "sunt");
+        assertEquals(85, todosSunt.length, "Incorrect number of To-Dos with contains \"sunt\". 85 results should be found.");
+
+      //Check results are 0 if given a nonexistent category
+      ToDos[] todosNicGood = db.filterToDosByCategory(allToDos, "NicGood");
+      assertEquals(0, todosNicGood.length, "Incorrect number of To-Dos with category \"NicGood\". No results should be found.");
+
+    }
+
+    @Test
     void testFilterToDosByOrder() throws IOException {
       ToDosDatabase db = new ToDosDatabase("/todos.json");
       ToDos[] allToDos = db.listToDos(new HashMap<>());
