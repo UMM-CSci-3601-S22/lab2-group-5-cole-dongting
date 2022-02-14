@@ -74,6 +74,12 @@ public class ToDosDatabase {
       filteredToDos = filterToDosByCategory(filteredToDos, targetCategory);
     }
 
+    // Filter body contains
+    if (queryParams.containsKey("contains")) {
+      String targetBody = queryParams.get("contains").get(0);
+      filteredToDos = filterToDosByBodyContains(filteredToDos, targetBody);
+    }
+
     // Filter limit of tasks
     if (queryParams.containsKey("limit")) {
       String limitParams = queryParams.get("limit").get(0);
@@ -132,6 +138,12 @@ public class ToDosDatabase {
         .filter(x -> x.status == requestedStatus)
         .toArray(ToDos[]::new);
 
+  }
+
+  public ToDos[] filterToDosByBodyContains(ToDos[] todos, String targetBody) {
+    return Arrays.stream(todos)
+        .filter(x -> x.body.contains(targetBody))
+        .toArray(ToDos[]::new);
   }
 
   public ToDos[] filterToDosByLimit(ToDos[] todos, int targetLimit) {
