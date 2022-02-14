@@ -38,11 +38,17 @@ public class ToDoFiltersTest {
     ToDosDatabase db = new ToDosDatabase("/todos.json");
     Map<String, List<String>> queryParams = new HashMap<>();
 
-    // Test real status
+    // Test real status - complete
     queryParams.put("status", Arrays.asList(new String[] {"complete"}));
     ToDos[] completeToDos = db.listToDos(queryParams);
     assertEquals(143, completeToDos.length,
         "Incorrect number of To-Dos with status \"complete\". There are 143 total.");
+
+    // Test real status - incomplete
+    queryParams.put("status", Arrays.asList(new String[] {"incomplete"}));
+    ToDos[] incompleteToDos = db.listToDos(queryParams);
+    assertEquals(157, incompleteToDos.length,
+        "Incorrect number of To-Dos with status \"incomplete\". There are 157 total.");
 
     // Test nonexistent status
     queryParams.clear();
@@ -53,20 +59,20 @@ public class ToDoFiltersTest {
   }
 
     // Test category filter for ToDosDatabase
-    @Test
-    public void ownerFilters() throws IOException {
-      ToDosDatabase db = new ToDosDatabase("/todos.json");
-      Map<String, List<String>> queryParams = new HashMap<>();
+  @Test
+  public void ownerFilters() throws IOException {
+    ToDosDatabase db = new ToDosDatabase("/todos.json");
+    Map<String, List<String>> queryParams = new HashMap<>();
 
-      // Test real owner
-      queryParams.put("owner", Arrays.asList(new String[] {"Fry"}));
-      ToDos[] softwareDesignToDos = db.listToDos(queryParams);
-      assertEquals(61, softwareDesignToDos.length,
-          "Incorrect number of To-Dos with owner \"Fry\". There are 61 total.");
-      // Test nonexistent owner
-      queryParams.clear();
-      queryParams.put("owner", Arrays.asList(new String[] {"foobar"}));
-      ToDos[] foobarToDos = db.listToDos(queryParams);
-      assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
+    // Test real owner
+    queryParams.put("owner", Arrays.asList(new String[] {"Fry"}));
+    ToDos[] softwareDesignToDos = db.listToDos(queryParams);
+    assertEquals(61, softwareDesignToDos.length,
+        "Incorrect number of To-Dos with owner \"Fry\". There are 61 total.");
+    // Test nonexistent owner
+    queryParams.clear();
+    queryParams.put("owner", Arrays.asList(new String[] {"foobar"}));
+    ToDos[] foobarToDos = db.listToDos(queryParams);
+    assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
     }
 }
