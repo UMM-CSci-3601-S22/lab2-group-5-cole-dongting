@@ -11,6 +11,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.javalin.http.BadRequestResponse;
+
 @SuppressWarnings({ "MagicNumber", "LineLength" })
 public class ToDoFiltersTest {
 
@@ -58,6 +60,25 @@ public class ToDoFiltersTest {
     });
   }
 
+    // Test body contains for ToDosDatabase
+    @Test
+    public void bodyContainsFilters() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test real contains
+      queryParams.put("contains", Arrays.asList(new String[] {"sunt"}));
+      ToDos[] suntToDos = db.listToDos(queryParams);
+      assertEquals(85, suntToDos.length,
+          "Incorrect number of To-Dos with body contains \"sunt\". There are 85 total.");
+
+      // Test nonexistent contains
+      queryParams.clear();
+      queryParams.put("contains", Arrays.asList(new String[] {"NicReallyGood"}));
+      ToDos[] nicReallyGoodToDos = db.listToDos(queryParams);
+      assertEquals(0, nicReallyGoodToDos.length, "Incorrect number of To-Dos with body contains \"NicReallyGood\". There are 0 total.");
+    }
+
     // Test category filter for ToDosDatabase
   @Test
   public void ownerFilters() throws IOException {
@@ -74,5 +95,45 @@ public class ToDoFiltersTest {
     queryParams.put("owner", Arrays.asList(new String[] {"foobar"}));
     ToDos[] foobarToDos = db.listToDos(queryParams);
     assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
+    }
+
+    // Test Category orderBy for ToDosDatabase
+    @Test
+    public void orderByCategory() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test real orderBy Category
+      queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
+      ToDos[] totalToDos = db.listToDos(queryParams);
+      assertEquals(300, totalToDos.length,
+          "Incorrect Input.");
+
+      // Test nonexistent orderBy Category
+      queryParams.clear();
+      queryParams.put("orderBy", Arrays.asList(new String[] {"number"}));
+      Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        db.listToDos(queryParams);
+      });
+    }
+
+    // Test limit filter for ToDosDatabase
+    @Test
+    public void limitFilters() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test valid limit filter
+      queryParams.put("limit", Arrays.asList(new String[] {"3"}));
+      ToDos[] limitThreeToDos = db.listToDos(queryParams);
+      assertEquals(3, limitThreeToDos.length,
+          "Incorrect number of limit vale. Please enter a correct value and try again.");
+
+      // Test not-valid limit filter
+      queryParams.clear();
+      queryParams.put("limit", Arrays.asList(new String[] {"a"}));
+      Assertions.assertThrows(BadRequestResponse.class, () -> {
+        db.listToDos(queryParams);
+      });
     }
 }

@@ -3,6 +3,7 @@ package umm3601.todos;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,12 @@ public class ToDosDatabase {
       filteredToDos = filterToDosByCategory(filteredToDos, targetCategory);
     }
 
+    // Filter body contains
+    if (queryParams.containsKey("contains")) {
+      String targetBody = queryParams.get("contains").get(0);
+      filteredToDos = filterToDosByBodyContains(filteredToDos, targetBody);
+    }
+
     // Filter limit of tasks
     if (queryParams.containsKey("limit")) {
       String limitParams = queryParams.get("limit").get(0);
@@ -86,6 +93,10 @@ public class ToDosDatabase {
     }
 
     // Process other query parameters here...
+    if (queryParams.containsKey("orderBy")) {
+      String targetOrderBy = queryParams.get("orderBy").get(0);
+      filteredToDos = filterToDosByOrder(filteredToDos, targetOrderBy);
+    }
 
     return filteredToDos;
   }
@@ -131,6 +142,33 @@ public class ToDosDatabase {
     return Arrays.stream(todos)
         .filter(x -> x.status == requestedStatus)
         .toArray(ToDos[]::new);
+
+  }
+
+  public ToDos[] filterToDosByBodyContains(ToDos[] todos, String targetBody) {
+    return Arrays.stream(todos)
+        .filter(x -> x.body.contains(targetBody))
+        .toArray(ToDos[]::new);
+  }
+
+  public ToDos[] filterToDosByOrder(ToDos[] todos, String targetOrderBy) {
+    List<ToDos> todosAsList = Arrays.asList(todos);
+
+    if (targetOrderBy.equals("owner")) {
+      todosAsList.sort(Comparator.comparing(ToDos::getOwner));
+    } else if (targetOrderBy.equals("category")) {
+      todosAsList.sort(Comparator.comparing(ToDos::getCategory));
+    } else if (targetOrderBy.equals("body")) {
+      todosAsList.sort(Comparator.comparing(ToDos::getBody));
+    } else if (targetOrderBy.equals("status")) {
+      todosAsList.sort(Comparator.comparing(ToDos::getStatus));
+    } else {
+      throw new IllegalArgumentException("Invalid status: " + targetOrderBy);
+    }
+
+    ToDos[] todosBackToArray = todosAsList.toArray(ToDos[]::new);
+
+    return todosBackToArray;
 
   }
 
