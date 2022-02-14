@@ -52,6 +52,25 @@ public class ToDoFiltersTest {
     });
   }
 
+    // Test body contains for ToDosDatabase
+    @Test
+    public void bodyContainsFilters() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test real contains
+      queryParams.put("contains", Arrays.asList(new String[] {"sunt"}));
+      ToDos[] suntToDos = db.listToDos(queryParams);
+      assertEquals(85, suntToDos.length,
+          "Incorrect number of To-Dos with body contains \"sunt\". There are 85 total.");
+
+      // Test nonexistent contains
+      queryParams.clear();
+      queryParams.put("contains", Arrays.asList(new String[] {"NicReallyGood"}));
+      ToDos[] NicReallyGoodToDos = db.listToDos(queryParams);
+      assertEquals(0, NicReallyGoodToDos.length, "Incorrect number of To-Dos with body contains \"NicReallyGood\". There are 0 total.");
+    }
+
     // Test category filter for ToDosDatabase
     @Test
     public void ownerFilters() throws IOException {
