@@ -11,6 +11,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import io.javalin.http.BadRequestResponse;
+
 @SuppressWarnings({ "MagicNumber", "LineLength" })
 public class ToDoFiltersTest {
 
@@ -82,10 +84,51 @@ public class ToDoFiltersTest {
       ToDos[] softwareDesignToDos = db.listToDos(queryParams);
       assertEquals(61, softwareDesignToDos.length,
           "Incorrect number of To-Dos with owner \"Fry\". There are 61 total.");
+
       // Test nonexistent owner
       queryParams.clear();
       queryParams.put("owner", Arrays.asList(new String[] {"foobar"}));
       ToDos[] foobarToDos = db.listToDos(queryParams);
       assertEquals(0, foobarToDos.length, "Incorrect number of To-Dos with owner \"foobar\". There are 0 total.");
+    }
+
+    // Test Category orderBy for ToDosDatabase
+    @Test
+    public void orderByCategory() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test real orderBy Category
+      queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
+      ToDos[] totalToDos = db.listToDos(queryParams);
+      assertEquals(300, totalToDos.length,
+          "Incorrect Input.");
+
+      // Test nonexistent orderBy Category
+      queryParams.clear();
+      queryParams.put("orderBy", Arrays.asList(new String[] {"number"}));
+      Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        db.listToDos(queryParams);
+      });
+    }
+
+    // Test limit filter for ToDosDatabase
+    @Test
+    public void limitFilters() throws IOException {
+      ToDosDatabase db = new ToDosDatabase("/todos.json");
+      Map<String, List<String>> queryParams = new HashMap<>();
+
+      // Test valid limit filter
+      queryParams.put("limit", Arrays.asList(new String[] {"3"}));
+      ToDos[] limitThreeToDos = db.listToDos(queryParams);
+      assertEquals(3, limitThreeToDos.length,
+          "Incorrect number of limit vale. Please enter a correct value and try again.");
+
+      // Test not-valid limit filter
+      queryParams.clear();
+      queryParams.put("limit", Arrays.asList(new String[] {"a"}));
+      Assertions.assertThrows(BadRequestResponse.class, () -> {
+        db.listToDos(queryParams);
+      });
     }
 }
